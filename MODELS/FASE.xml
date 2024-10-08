@@ -1,0 +1,55 @@
+<system>
+	<actor function="camera" id="1">
+    <output port="images">1</output>
+		<frequency unit="Hz">3/1</frequency>
+    <execution-time unit="ms">4</execution-time>
+	</actor>
+ 
+	<actor function="radar" id="2">
+    <output port="samples">1/4</output>
+		<frequency unit="Hz">12/1</frequency>
+    <execution-time unit="ms">1</execution-time>
+	</actor>
+ 
+	<actor function="lidar" id="3">
+    <output port="scan">1</output>
+		<frequency unit="Hz">1/1</frequency>
+    <execution-time unit="ms">8</execution-time>
+	</actor>
+ 
+  <actor function="fusion" id="4">
+    <input port="lidar">1/3</input>
+    <input port="radar">1</input>
+    <input port="camera">1</input>
+    <output port="render">1</output>
+    <execution-time unit="ms">5</execution-time>
+  </actor>
+    
+	<actor function="display" id="5">
+    <input port="frame">3/4</input>
+		<frequency unit="Hz">4/1</frequency>
+		<phase unit="ms">20</phase>
+    <execution-time unit="ms">3</execution-time>
+	</actor>
+ 
+	<channel>
+		<producer actor="1" port="images"/>
+		<consumer actor="4" port="camera"/>
+	</channel>
+ 
+	<channel>
+		<producer actor="2" port="samples"/>
+		<consumer actor="4" port="radar"/>
+		<init>3/4</init>
+	</channel>
+ 
+	<channel>
+		<producer actor="3" port="scan"/>
+		<consumer actor="4" port="lidar"/>
+	</channel>
+ 
+	<channel>
+		<producer actor="4" port="render"/>
+		<consumer actor="5" port="frame"/>
+	</channel>
+</system>
